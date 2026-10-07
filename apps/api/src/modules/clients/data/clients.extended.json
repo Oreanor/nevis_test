@@ -1,0 +1,292 @@
+{
+  "id": "d6e00056-dce4-4ef4-b034-d6467db6187d",
+  "name": "Company",
+  "values": [250, 267, 284, 279, 317, 334, 352, 250, 250, 250, 250, 350],
+  "branches": [
+    {
+      "id": "d6b668e1-89a4-4467-bdf6-c9ebaf2cea5f",
+      "name": "Branch 1",
+      "values": [147, 157, 166, 156, 188, 201, 216, 147, 147, 147, 147, 214],
+      "employees": [
+        {
+          "id": "e3c4637b-2f21-4b7e-883e-b13ae1a6df6a",
+          "name": "Anna Blackwood",
+          "values": [25, 26, 28, 31, 32, 34, 38, 27, 27, 27, 27, 38],
+          "channels": [
+            {
+              "id": "716e7c30-b7c3-45c5-aa64-cbcf483917e0",
+              "name": "Existing clients",
+              "values": [23, 24, 26, 28, 29, 32, 36, 25, 25, 25, 25, 36]
+            },
+            {
+              "id": "bc5cd63a-668b-4c37-854d-69c1bd5fcbcd",
+              "name": "New organic",
+              "values": [1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1]
+            },
+            {
+              "id": "abbf873a-a0eb-46b8-b4cf-dc58e5f7a2d7",
+              "name": "New paid",
+              "values": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+            }
+          ]
+        },
+        {
+          "id": "afe9ebc0-6c35-4690-80b0-20e9bc0d8c7d",
+          "name": "James Walker",
+          "values": [12, 13, 14, 14, 15, 15, 16, 12, 12, 12, 12, 17],
+          "channels": [
+            {
+              "id": "f5797266-0d67-4593-903b-9c5f6e41d6f3",
+              "name": "Existing clients",
+              "values": [11, 13, 13, 13, 13, 14, 15, 12, 11, 12, 11, 16]
+            },
+            {
+              "id": "052aa397-7f86-4c65-9822-44bac8541298",
+              "name": "New organic",
+              "values": [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
+            },
+            {
+              "id": "52a93a13-3f7a-4d14-acd7-868dda692d59",
+              "name": "New paid",
+              "values": [1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1]
+            }
+          ]
+        },
+        {
+          "id": "bb012770-02d3-4999-aa08-c11a9065235d",
+          "name": "Maria Gutierrez",
+          "values": [36, 39, 41, 22, 46, 48, 51, 35, 35, 35, 35, 52],
+          "channels": [
+            {
+              "id": "3cec279d-d033-40f7-84c1-644c25f16ec1",
+              "name": "Existing clients",
+              "values": [32, 36, 38, 20, 43, 43, 47, 31, 32, 32, 33, 47]
+            },
+            {
+              "id": "77e305aa-49b4-49fa-8ba1-6b502725903f",
+              "name": "New organic",
+              "values": [2, 2, 2, 1, 2, 2, 2, 2, 1, 1, 1, 3]
+            },
+            {
+              "id": "992c2b7f-f50a-4bf8-8b61-6fbca2e626ba",
+              "name": "New paid",
+              "values": [2, 1, 1, 1, 1, 3, 2, 2, 2, 2, 1, 2]
+            }
+          ]
+        },
+        {
+          "id": "61cd9425-2d8e-456f-b228-f7e7c6a76e5d",
+          "name": "Robert Chen",
+          "values": [42, 43, 46, 47, 51, 55, 58, 41, 41, 41, 41, 54],
+          "channels": [
+            {
+              "id": "142f486c-cc82-45aa-a025-76228e0bf247",
+              "name": "Existing clients",
+              "values": [38, 40, 42, 42, 46, 49, 53, 36, 37, 38, 38, 48]
+            },
+            {
+              "id": "3ed3ad04-bc13-4cdb-8fdc-5ce234f9dd13",
+              "name": "New organic",
+              "values": [2, 2, 3, 2, 2, 3, 2, 2, 2, 2, 2, 3]
+            },
+            {
+              "id": "291a6aa4-da7e-4ba5-aec5-a0b453d78c30",
+              "name": "New paid",
+              "values": [2, 1, 1, 3, 3, 3, 3, 3, 2, 1, 1, 3]
+            }
+          ]
+        },
+        {
+          "id": "3e4efd29-e7e4-4695-a1dc-6f3b0853c19d",
+          "name": "Sarah Smith",
+          "values": [32, 36, 37, 42, 44, 49, 53, 32, 32, 32, 32, 53],
+          "channels": [
+            {
+              "id": "6c6de9e5-b54e-414e-b6c7-927a2f3cc016",
+              "name": "Existing clients",
+              "values": [29, 34, 35, 39, 42, 46, 50, 30, 30, 30, 30, 51]
+            },
+            {
+              "id": "3c059f56-d478-4d07-9824-842a9c403f3a",
+              "name": "New organic",
+              "values": [2, 1, 1, 2, 1, 2, 2, 1, 1, 1, 1, 1]
+            },
+            {
+              "id": "72b828d1-3d54-4dc1-85c9-cd1c24d20a55",
+              "name": "New paid",
+              "values": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "71da0b06-5785-4a60-9273-4df2be619ee4",
+      "name": "Branch 2",
+      "values": [76, 80, 84, 87, 90, 92, 94, 75, 75, 75, 75, 91],
+      "employees": [
+        {
+          "id": "8fe50954-e0f0-455b-bf08-43c96b4abd47",
+          "name": "Olivia Martin",
+          "values": [19, 21, 24, 25, 25, 26, 27, 18, 21, 21, 21, 24],
+          "channels": [
+            {
+              "id": "707fd097-2982-4efb-81e1-29495e9631de",
+              "name": "Existing clients",
+              "values": [17, 19, 22, 24, 23, 24, 25, 16, 20, 19, 20, 23]
+            },
+            {
+              "id": "1cd8707b-082e-4dab-8f7c-5ad8a70c716b",
+              "name": "New organic",
+              "values": [1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0]
+            },
+            {
+              "id": "8257542b-9dac-42ce-95c8-7854062f2e8f",
+              "name": "New paid",
+              "values": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+            }
+          ]
+        },
+        {
+          "id": "1eb3543d-1538-4192-a914-251599e28c84",
+          "name": "Daniel Kim",
+          "values": [26, 24, 26, 27, 28, 28, 31, 25, 22, 24, 23, 30],
+          "channels": [
+            {
+              "id": "c3fc9a28-c2a0-4906-ac56-90b1fbf7d417",
+              "name": "Existing clients",
+              "values": [24, 22, 24, 24, 26, 26, 29, 23, 20, 22, 21, 26]
+            },
+            {
+              "id": "49186211-8e95-40ba-a7d5-864f4397deb2",
+              "name": "New organic",
+              "values": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2]
+            },
+            {
+              "id": "250c3f2e-a32a-4fef-84c4-49da9c51e76a",
+              "name": "New paid",
+              "values": [1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2]
+            }
+          ]
+        },
+        {
+          "id": "b427b0f3-5c28-4ef2-a4a9-1ddf721aa6b6",
+          "name": "Priya Patel",
+          "values": [15, 17, 17, 17, 18, 19, 17, 16, 16, 15, 17, 18],
+          "channels": [
+            {
+              "id": "8ed4c011-541c-423c-8b80-e2832c10374f",
+              "name": "Existing clients",
+              "values": [15, 17, 17, 16, 18, 19, 17, 16, 15, 15, 17, 16]
+            },
+            {
+              "id": "e378360e-e140-4651-952f-4c77fb36f4c1",
+              "name": "New organic",
+              "values": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
+            },
+            {
+              "id": "8f27608b-f782-42e8-8148-11fdbee2bd8f",
+              "name": "New paid",
+              "values": [0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1]
+            }
+          ]
+        },
+        {
+          "id": "b205a244-94e2-4c6c-8a06-2c8a01796acc",
+          "name": "Lucas Moreau",
+          "values": [16, 18, 17, 18, 19, 19, 19, 16, 16, 15, 14, 19],
+          "channels": [
+            {
+              "id": "97f652c4-d156-4b00-bc12-e18182ecca20",
+              "name": "Existing clients",
+              "values": [14, 16, 15, 16, 17, 17, 17, 14, 14, 13, 13, 18]
+            },
+            {
+              "id": "5821b12d-4859-4ac3-aec9-4fbeb70b4557",
+              "name": "New organic",
+              "values": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+            },
+            {
+              "id": "50e6c9b0-4d3b-4892-95f5-9e84187f7c00",
+              "name": "New paid",
+              "values": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "63b01d42-922f-43ff-b0f8-2f3484e74c43",
+      "name": "Branch 3",
+      "values": [27, 30, 34, 36, 39, 41, 42, 28, 28, 28, 28, 45],
+      "employees": [
+        {
+          "id": "ca40faf5-f81c-49a7-9394-3ccc18a2418c",
+          "name": "Emma Johansson",
+          "values": [10, 11, 13, 14, 14, 16, 15, 10, 10, 11, 10, 17],
+          "channels": [
+            {
+              "id": "c0b94d8e-6f3d-4f7c-8de6-a4c4071aef1c",
+              "name": "Existing clients",
+              "values": [10, 10, 12, 13, 13, 15, 14, 10, 9, 11, 10, 16]
+            },
+            {
+              "id": "a2491ed2-3f12-424f-a1cf-9b528584d094",
+              "name": "New organic",
+              "values": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            },
+            {
+              "id": "4322564a-4c84-44cb-a2f6-010fac441f90",
+              "name": "New paid",
+              "values": [0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1]
+            }
+          ]
+        },
+        {
+          "id": "0678de77-982a-4d4d-ae60-5ae42576e558",
+          "name": "Noah Williams",
+          "values": [8, 9, 10, 10, 12, 12, 13, 8, 8, 8, 9, 13],
+          "channels": [
+            {
+              "id": "8538e49b-76fd-4027-b44d-29c04409494e",
+              "name": "Existing clients",
+              "values": [8, 9, 10, 10, 12, 12, 13, 8, 8, 8, 9, 13]
+            },
+            {
+              "id": "5d6aef4c-ef0b-4393-a6d3-5a36e030b167",
+              "name": "New organic",
+              "values": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            },
+            {
+              "id": "0b7e0c35-8009-48ac-8988-46c720cd93c0",
+              "name": "New paid",
+              "values": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            }
+          ]
+        },
+        {
+          "id": "e2a441c1-1869-479a-86de-9fd71e393b33",
+          "name": "Chloe Dubois",
+          "values": [9, 10, 11, 12, 13, 13, 14, 10, 10, 9, 9, 15],
+          "channels": [
+            {
+              "id": "46b549eb-fc93-49cf-a082-0f0af82a57fa",
+              "name": "Existing clients",
+              "values": [8, 10, 10, 11, 12, 12, 13, 10, 10, 9, 9, 14]
+            },
+            {
+              "id": "7b7673c5-224c-4ab2-a413-4d6e40a42957",
+              "name": "New organic",
+              "values": [1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1]
+            },
+            {
+              "id": "a651f358-e19e-4274-a786-3d4d7e5c5c84",
+              "name": "New paid",
+              "values": [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

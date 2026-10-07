@@ -1,0 +1,50 @@
+@import 'tailwindcss';
+
+/* One-screen layouts (fixed header, scrolling body) only where there is room for them; see docs/IMPROVEMENTS.md. */
+@custom-variant fit (@media (min-width: 40rem) and (min-height: 30rem));
+
+/* Tokens from Figma (see docs/DESIGN.md). Utilities: bg-page, bg-surface, text-ink, text-muted, … */
+@theme {
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --color-page: #f7f5ed;
+  --color-surface: #ffffff;
+  --color-ink: #141413;
+  /* Values from the Figma SVG exports: secondary text and grid are the ink colour at 60% / 16% opacity. */
+  --color-muted: rgb(20 20 19 / 0.6);
+  --color-line: rgb(20 20 19 / 0.08);
+  --color-grid: rgb(20 20 19 / 0.16);
+  --color-row-hover: #f5f5f5;
+  /* Opaque equivalent of the ink at 6% on white, so sticky cells hide what scrolls under them. */
+  --color-row-selected: #f0f0ef;
+  --color-skeleton: #ebe8df;
+  --color-focus: #6e56cf;
+
+  --color-series-existing: #b29df8;
+  --color-series-organic: #f4beb4;
+  --color-series-paid: #a75e6e;
+
+  /* Figma text styles: Title 35/125%, Body 14/20, Footnote 12/16 */
+  --text-title: 2.1875rem;
+  --text-title--line-height: 1.25;
+  --text-body: 0.875rem;
+  --text-body--line-height: 1.25rem;
+  /* Dense tables on small screens */
+  --text-compact: 0.8125rem;
+  --text-compact--line-height: 1.125rem;
+  --text-footnote: 0.75rem;
+  --text-footnote--line-height: 1rem;
+  /* Chart axes on small screens */
+  --text-micro: 0.6875rem;
+  --text-micro--line-height: 0.875rem;
+}
+
+@layer base {
+  html {
+    @apply bg-page font-sans text-ink antialiased;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-focus;
+  }
+}

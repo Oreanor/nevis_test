@@ -1,0 +1,16 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "workspaces": {
+    "apps/web": {
+      "entry": ["src/shared/ui/chart/index.ts", "src/shared/ui/tree-table/index.ts"],
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "apps/api": {
+      "project": ["src/**/*.ts", "scripts/**/*.ts"],
+      "entry": ["scripts/*.ts"]
+    },
+    "packages/shared": {
+      "project": ["src/**/*.ts"]
+    }
+  }
+}

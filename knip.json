@@ -1,6 +1,9 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
   "workspaces": {
+    ".": {
+      "entry": ["api/*.mjs"]
+    },
     "apps/web": {
       "entry": ["src/shared/ui/chart/index.ts", "src/shared/ui/tree-table/index.ts"],
       "project": ["src/**/*.{ts,tsx}"]

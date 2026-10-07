@@ -1,7 +1,8 @@
 import { defineConfig } from 'tsdown';
 
 export default defineConfig({
-  entry: ['src/server.ts'],
+  // server: long-running Node process; handler: the same app for serverless platforms (Vercel).
+  entry: ['src/server.ts', 'src/handler.ts'],
   outDir: 'dist',
   clean: true,
   format: 'esm',

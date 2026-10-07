@@ -74,6 +74,11 @@ $env:API_DELAY_MS=1500; $env:API_FAILURE_RATE=0.5; npm run dev  # PowerShell
 Production-like run: `npm run build` bundles the API (tsdown → `apps/api/dist/server.js`) and the web app
 (Vite). Then `npm start` runs the API on plain Node, and `npm run preview -w @nevis/web` serves the web build.
 
+**Deploying to Vercel.** `vercel.json` builds both apps, serves the web build as static files and runs the
+same Express app as a serverless function (`api/index.mjs` → `apps/api/dist/handler.js`) for `/api/*` and
+`/avatars/*`; every other path falls back to `index.html`, so `/explorer` works as a direct link. Import the
+repository in Vercel with the default settings; no environment variables are needed.
+
 ## Test and check
 
 ```bash

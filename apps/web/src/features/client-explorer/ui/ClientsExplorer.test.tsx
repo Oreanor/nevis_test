@@ -148,7 +148,7 @@ describe('ClientsExplorer', () => {
     expect(chartSegments().some((s) => s.classList.contains('opacity-25'))).toBe(false);
   });
 
-  it('uses a searchable adviser list as the legend in the adviser breakdown', async () => {
+  it('offers a persistent adviser search in the adviser breakdown', async () => {
     const { user, router } = renderExplorer('/explorer?by=adviser');
     await screen.findByRole('treegrid');
 
@@ -167,6 +167,8 @@ describe('ClientsExplorer', () => {
     expect(router.state.location.search).toBe('?by=adviser&scope=total%2Fadviser%3Ajames');
     expect(row('James')).toHaveAttribute('aria-selected', 'true');
     expect(legendLabels()).toEqual(['Existing clients', 'New organic', 'New paid']);
+    // The adviser search stays, showing the chosen adviser, so another one can be picked straight away.
+    expect(screen.getByRole('combobox', { name: 'Advisers' })).toHaveValue('James');
   });
 
   it('keeps the plain legend when advisers are split under a branch', async () => {

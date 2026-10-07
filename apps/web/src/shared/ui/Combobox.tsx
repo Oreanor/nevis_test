@@ -1,14 +1,17 @@
 import { clsx } from 'clsx';
 import {
+  type CSSProperties,
   type KeyboardEvent,
   type ReactNode,
   useEffect,
   useEffectEvent,
   useId,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
 } from 'react';
+import { createPortal } from 'react-dom';
 
 import { filterOptions } from '../lib/filterOptions';
 import { ChevronRightIcon } from './icons/ChevronRightIcon';
@@ -20,6 +23,27 @@ export interface ComboboxOption {
   description?: string;
   /** Leading visual, e.g. an avatar; decorative. */
   icon?: ReactNode;
+}
+
+const POPUP_GAP = 4;
+const POPUP_MAX_HEIGHT = 200;
+const POPUP_MIN_HEIGHT = 120;
+
+/**
+ * Where the list goes: below the input, or above it when there is not enough room below. Fixed positioning in
+ * a portal keeps it from being clipped by scrolling or overflow-hidden ancestors.
+ */
+function popupStyle(input: HTMLElement): CSSProperties {
+  const rect = input.getBoundingClientRect();
+  const below = window.innerHeight - rect.bottom - POPUP_GAP * 2;
+  const above = rect.top - POPUP_GAP * 2;
+  const openUp = below < POPUP_MIN_HEIGHT && above > below;
+  return {
+    left: rect.left,
+    width: rect.width,
+    maxHeight: Math.min(POPUP_MAX_HEIGHT, Math.max(openUp ? above : below, 0)),
+    ...(openUp ? { bottom: window.innerHeight - rect.top + POPUP_GAP } : { top: rect.bottom + POPUP_GAP }),
+  };
 }
 
 interface ComboboxProps {
@@ -60,6 +84,22 @@ export function Combobox({
   const [activeIndex, setActiveIndex] = useState(0);
   const matches = useMemo(() => filterOptions(options, query), [options, query]);
   const active = isOpen ? matches[Math.min(activeIndex, matches.length - 1)] : undefined;
+
+  const [popup, setPopup] = useState<CSSProperties | null>(null);
+  useLayoutEffect(() => {
+    if (!isOpen) return;
+    const place = () => {
+      if (inputRef.current) setPopup(popupStyle(inputRef.current));
+    };
+    place();
+    // Capture: also follow scrolling of any ancestor, not only the window.
+    window.addEventListener('scroll', place, true);
+    window.addEventListener('resize', place);
+    return () => {
+      window.removeEventListener('scroll', place, true);
+      window.removeEventListener('resize', place);
+    };
+  }, [isOpen]);
 
   const reportActive = useEffectEvent((activeId: string | null) => onActiveChange?.(activeId));
   const activeId = active?.id ?? null;
@@ -148,44 +188,48 @@ export function Combobox({
           )}
         />
       </div>
-      {isOpen && (
-        <ul
-          id={listboxId}
-          role="listbox"
-          aria-label={label}
-          className="absolute top-full right-0 left-0 z-40 mt-1 max-h-64 overflow-y-auto rounded-md bg-surface p-1 shadow-lg ring-1 ring-line"
-        >
-          {matches.length === 0 && <li className="px-2 py-1.5 text-footnote text-muted">{emptyMessage}</li>}
-          {matches.map((option) => (
-            <li
-              key={option.id}
-              id={`${id}-option-${option.id}`}
-              role="option"
-              aria-selected={option.id === value}
-              // Keep focus in the input: pick on mousedown, before the input's blur closes the list.
-              onMouseDown={(event) => {
-                event.preventDefault();
-                pick(option);
-              }}
-              onMouseEnter={() => setActiveIndex(matches.indexOf(option))}
-              className={clsx(
-                'flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-body',
-                option === active && 'bg-row-hover',
-                option.id === value && 'font-medium',
-              )}
-            >
-              {option.icon}
-              <span className="min-w-0 truncate">{option.label}</span>
-              {option.description && (
-                <span className="ml-auto shrink-0 text-footnote text-muted">
-                  <span className="sr-only">, </span>
-                  {option.description}
-                </span>
-              )}
-            </li>
-          ))}
-        </ul>
-      )}
+      {isOpen &&
+        popup &&
+        createPortal(
+          <ul
+            id={listboxId}
+            role="listbox"
+            aria-label={label}
+            style={popup}
+            className="fixed z-50 overflow-y-auto rounded-md bg-surface p-1 shadow-lg ring-1 ring-line"
+          >
+            {matches.length === 0 && <li className="px-2 py-1.5 text-footnote text-muted">{emptyMessage}</li>}
+            {matches.map((option) => (
+              <li
+                key={option.id}
+                id={`${id}-option-${option.id}`}
+                role="option"
+                aria-selected={option.id === value}
+                // Keep focus in the input: pick on mousedown, before the input's blur closes the list.
+                onMouseDown={(event) => {
+                  event.preventDefault();
+                  pick(option);
+                }}
+                onMouseEnter={() => setActiveIndex(matches.indexOf(option))}
+                className={clsx(
+                  'flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-body',
+                  option === active && 'bg-row-hover',
+                  option.id === value && 'font-medium',
+                )}
+              >
+                {option.icon}
+                <span className="min-w-0 truncate">{option.label}</span>
+                {option.description && (
+                  <span className="ml-auto shrink-0 text-footnote text-muted">
+                    <span className="sr-only">, </span>
+                    {option.description}
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>,
+          document.body,
+        )}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { Avatar } from '@/shared/ui/Avatar';
 
 import type { PivotNode } from '../model/pivot';
+import { Swatch } from './Swatch';
 
 interface ExplorerRowNameProps {
   node: PivotNode;
@@ -11,13 +12,7 @@ interface ExplorerRowNameProps {
 export function ExplorerRowName({ node, seriesColor }: ExplorerRowNameProps) {
   return (
     <span className="flex min-w-0 items-center gap-2">
-      {seriesColor && (
-        <span
-          aria-hidden="true"
-          className="size-2 shrink-0 rounded-[2px]"
-          style={{ backgroundColor: seriesColor }}
-        />
-      )}
+      {seriesColor && <Swatch color={seriesColor} />}
       {node.dimension === 'adviser' && <Avatar name={node.name} src={node.avatarUrl} size={20} />}
       <span className="truncate">{node.name}</span>
       {node.context && (

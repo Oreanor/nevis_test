@@ -51,7 +51,11 @@ export function TreeTableRow<T>({
       aria-setsize={setSize}
       aria-expanded={isExpandable ? isExpanded : undefined}
       aria-selected={isSelected !== undefined && isExpandable ? isSelected : undefined}
-      className={clsx('group outline-none', rowHeightClass, isExpandable && 'cursor-pointer')}
+      className={clsx(
+        'group outline-none',
+        rowHeightClass,
+        isExpandable ? 'cursor-pointer' : 'cursor-default',
+      )}
     >
       <th
         scope="row"

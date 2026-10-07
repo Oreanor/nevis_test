@@ -87,6 +87,9 @@ One simple rule: **the chart always shows the selected row, split by its childre
   highlights its row. The whole month column reacts to the pointer, because some segments are only a pixel
   or two tall.
 - Hovering a legend entry highlights that series in the chart and its row in the table.
+- In the adviser breakdown an adviser search stays in the panel: it lists every adviser with their colour and
+  branch, previews the one under the pointer or keyboard in the chart, and focuses the chart on the one you
+  pick (the table scrolls to that row). The chosen name stays in the field, so switching advisers is one step.
 
 ### 6. Richer demo data
 

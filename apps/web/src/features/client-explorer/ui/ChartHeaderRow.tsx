@@ -68,7 +68,7 @@ export function ChartHeaderRow({
           <td
             key={month.key}
             data-month={month.key}
-            className={`relative bg-surface px-2 py-0 align-top sm:pr-6 sm:pl-0 ${CHART_HEIGHT_CLASS}`}
+            className={`relative cursor-default bg-surface px-2 py-0 align-top sm:pr-6 sm:pl-0 ${CHART_HEIGHT_CLASS}`}
             onMouseEnter={() => onHoverChange({ month: month.index, seriesKey: null })}
             onMouseLeave={() => onHoverChange(null)}
           >

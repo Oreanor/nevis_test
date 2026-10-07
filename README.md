@@ -101,7 +101,7 @@ What is covered (around 200 tests):
 - **axe-core scans** of the table, the chart, the dashboard in every state, the explorer and whole pages through
   the router. (Colour contrast cannot be computed in jsdom; it was checked with a palette validator instead.)
 - **Explorer**: the pivot model, the colour model, selection and re-scoping, highlighting, the tooltip, the
-  searchable adviser legend, and the URL state.
+  adviser search, and the URL state.
 - **API**: both datasets validate against the shared schema, irregular nesting is preserved, avatars are
   served, invalid input returns 400, and errors never leak internal details.
 
@@ -186,9 +186,10 @@ reader, is in [`docs/IMPROVEMENTS.md`](docs/IMPROVEMENTS.md).
 - **Linked highlighting.** Hovering or focusing a row highlights it in the chart (a row deeper than the chart's
   level is marked as its share of the containing segment). Hovering a month shows a tooltip with every value
   and highlights the month in the table; hovering a segment or a legend entry highlights its row.
-- **A legend that names its categories** (Branches, Advisers, Client types). When the chart is split by adviser,
-  the legend becomes a searchable list: type a name, preview it in the chart with the arrow keys, and press
-  Enter to focus the chart on that adviser.
+- **A legend that names its categories** (Branches, Advisers, Client types). When the data is broken down by
+  adviser, an adviser search stays in the panel: it lists every adviser with their colour and branch (so it
+  doubles as the legend), previews the highlighted one in the chart, and focuses the chart on the one you pick.
+  It keeps the chosen name, so you can switch advisers directly; the client-type legend appears below it.
 - **Colours that belong to the entity.** Branch 2 has the same colour in every view; advisers use shades of
   their branch's colour, so the branch structure stays visible even with many advisers. The palettes were
   checked with a validator for colour-blind safety and contrast, and muddy colours (dark oranges and
@@ -218,7 +219,7 @@ card, and the parts you need for orientation stay in place.**
 - **Explorer on small screens.** Below those sizes the page scrolls normally instead: a scroll area inside a
   scrolling page is awkward on touch screens. The controls move above the table, and the name column stays
   pinned.
-- **Scrolling to a choice.** Picking an adviser in the searchable legend scrolls the table so that the row lands
+- **Scrolling to a choice.** Picking an adviser in the adviser search scrolls the table so that the row lands
   just below the fixed header.
 
 ## How it is built

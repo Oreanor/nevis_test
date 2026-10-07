@@ -2,32 +2,24 @@ import { clsx } from 'clsx';
 import { useId } from 'react';
 
 import type { ChartSeries } from '@/shared/ui/chart';
-import { Combobox } from '@/shared/ui/Combobox';
+
+import { Swatch } from './Swatch';
 
 /** Above this many series a plain list stops helping; colours are identified by hovering instead. */
 const MAX_LISTED_SERIES = 6;
 
 interface SeriesLegendProps {
   series: readonly ChartSeries[];
-  /** What the colours stand for, e.g. "Advisers"; the legend's title. */
+  /** What the colours stand for, e.g. "Client types"; the legend's title. */
   title: string;
   /** Singular noun for one series, e.g. "adviser", used when the list is too long to show. */
   seriesNoun: string;
   /** Series to emphasise (e.g. the hovered row). */
   highlightedKey?: string | null;
-  /** Pointer (or keyboard, when searchable) over an entry, `null` when it leaves; highlights the series. */
+  /** Pointer over an entry (or `null` when it leaves the legend), to highlight that series elsewhere. */
   onHoverChange?: (seriesKey: string | null) => void;
-  /** Render as a searchable list (for many series, e.g. all advisers); picking an entry calls `onPick`. */
-  searchable?: boolean;
-  onPick?: (seriesKey: string) => void;
-  /** Secondary text per entry in the searchable list, e.g. the adviser's branch. */
-  getDescription?: (seriesKey: string) => string | undefined;
   className?: string;
 }
-
-const Swatch = ({ color }: { color: string }) => (
-  <span aria-hidden="true" className="size-2 shrink-0 rounded-[2px]" style={{ backgroundColor: color }} />
-);
 
 export function SeriesLegend({
   series,
@@ -35,31 +27,9 @@ export function SeriesLegend({
   seriesNoun,
   highlightedKey = null,
   onHoverChange,
-  searchable = false,
-  onPick,
-  getDescription,
   className,
 }: SeriesLegendProps) {
   const titleId = useId();
-
-  if (searchable) {
-    return (
-      <Combobox
-        className={className}
-        label={title}
-        placeholder={`Find ${/^[aeiou]/i.test(seriesNoun) ? 'an' : 'a'} ${seriesNoun}…`}
-        options={series.map((s) => ({
-          id: s.key,
-          label: s.label,
-          description: getDescription?.(s.key),
-          icon: <Swatch color={s.color} />,
-        }))}
-        value={null}
-        onChange={(key) => onPick?.(key)}
-        onActiveChange={onHoverChange}
-      />
-    );
-  }
 
   return (
     <div className={clsx('flex min-w-0 flex-col gap-1.5', className)}>
@@ -81,7 +51,7 @@ export function SeriesLegend({
               key={s.key}
               onMouseEnter={onHoverChange && (() => onHoverChange(s.key))}
               className={clsx(
-                'flex min-w-0 items-center gap-1.5',
+                'flex min-w-0 cursor-default items-center gap-1.5',
                 highlightedKey === null || highlightedKey === s.key ? 'text-ink' : 'text-muted',
               )}
             >

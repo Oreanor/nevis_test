@@ -4,6 +4,7 @@ import { formatInteger } from '@/shared/lib/format';
 import { buildMonthColumns } from '@/shared/lib/months';
 import { useElementSize } from '@/shared/lib/useElementSize';
 import { createStackScale } from '@/shared/ui/chart';
+import { Combobox } from '@/shared/ui/Combobox';
 import { TreeTable, type TreeTableColumn } from '@/shared/ui/tree-table';
 
 import type { ExplorerView } from '../model/explorerView';
@@ -16,6 +17,7 @@ import { CHART_Y_AXIS_SPACE, ChartHeaderRow, type ChartHover } from './ChartHead
 import { ExplorerRowName } from './ExplorerRowName';
 import { ScopeBreadcrumb } from './ScopeBreadcrumb';
 import { SeriesLegend } from './SeriesLegend';
+import { Swatch } from './Swatch';
 
 /** Legend titles: what the colours stand for. */
 const SERIES_TITLE: Record<string, string> = {
@@ -67,14 +69,16 @@ export function ExplorerGrid({ facts, view, onViewChange }: ExplorerGridProps) {
   const [chartHover, setChartHover] = useState<ChartHover | null>(null);
   const [legendHover, setLegendHover] = useState<string | null>(null);
   // Pointing at a series (chart segment, then legend entry) wins over the active table row.
-  const hoveredSeries = chartHover?.seriesKey ?? legendHover;
+  // A previewed adviser only counts when it is a series of the current chart (else nothing would match).
+  const previewedSeries = legendHover && chart.series.some((s) => s.key === legendHover) ? legendHover : null;
+  const hoveredSeries = chartHover?.seriesKey ?? previewedSeries;
   const highlight = hoveredSeries ? { seriesKey: hoveredSeries } : resolveHighlight(tree, scope.id, activeId);
 
   const [cornerRef, corner] = useElementSize<HTMLTableCellElement>();
   const scale = useMemo(
     () =>
       corner.height > 0
-        ? createStackScale(chart.stacks, { height: corner.height, paddingTop: 12, paddingBottom: 8 })
+        ? createStackScale(chart.stacks, { height: corner.height, paddingTop: 28, paddingBottom: 8 })
         : null,
     [chart.stacks, corner.height],
   );
@@ -91,6 +95,19 @@ export function ExplorerGrid({ facts, view, onViewChange }: ExplorerGridProps) {
   );
 
   const selectScope = (scopeId: string) => onViewChange({ ...view, scopeId });
+
+  const adviserOptions = useMemo(
+    () =>
+      view.breakdown === 'adviser'
+        ? tree.children.map((node) => ({
+            id: node.id,
+            label: node.name,
+            description: node.context,
+            icon: <Swatch color={colors.colorOf(node)} />,
+          }))
+        : null,
+    [view.breakdown, tree, colors],
+  );
 
   // Picking a series from the legend: select its row, expand it and bring it into view below the header.
   const sectionRef = useRef<HTMLElement>(null);
@@ -144,16 +161,26 @@ export function ExplorerGrid({ facts, view, onViewChange }: ExplorerGridProps) {
           value={view.breakdown}
           onChange={(breakdown) => onViewChange({ breakdown, scopeId: TOTAL_ID })}
         />
-        <SeriesLegend
-          series={chart.series}
-          title={seriesTitle}
-          seriesNoun={seriesNoun}
-          highlightedKey={highlight?.seriesKey}
-          onHoverChange={setLegendHover}
-          searchable={view.breakdown === 'adviser' && seriesDimension === 'adviser'}
-          onPick={focusSeries}
-          getDescription={(key) => scope.children.find((child) => child.id === key)?.context}
-        />
+        {adviserOptions && (
+          // Always available in the adviser breakdown: pick or switch advisers; doubles as the colour legend.
+          <Combobox
+            label="Advisers"
+            placeholder="Find an adviser…"
+            options={adviserOptions}
+            value={scopePath[1]?.id ?? null}
+            onChange={focusSeries}
+            onActiveChange={setLegendHover}
+          />
+        )}
+        {!(adviserOptions && seriesDimension === 'adviser') && (
+          <SeriesLegend
+            series={chart.series}
+            title={seriesTitle}
+            seriesNoun={seriesNoun}
+            highlightedKey={highlight?.seriesKey}
+            onHoverChange={setLegendHover}
+          />
+        )}
       </div>
       <p role="status" className="sr-only">
         Chart shows {scope.name} by {seriesNoun}.

@@ -42,6 +42,8 @@
 @layer base {
   html {
     @apply bg-page font-sans text-ink antialiased;
+    /* Reserve the scrollbar's space so the layout does not shift when content starts to scroll. */
+    scrollbar-gutter: stable;
   }
 
   :focus-visible {

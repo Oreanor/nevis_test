@@ -186,7 +186,7 @@ export function ExplorerGrid({ facts, view, onViewChange }: ExplorerGridProps) {
 
       <TreeTable
         aria-labelledby={headingId}
-        className="min-h-0 flex-1 rounded-lg fit:[scrollbar-gutter:stable] fit:overflow-auto"
+        className="min-h-0 flex-1 rounded-lg fit:scrollbar-below-header fit:[scrollbar-gutter:stable] fit:overflow-auto"
         data={[tree]}
         columns={columns}
         getRowId={getRowId}

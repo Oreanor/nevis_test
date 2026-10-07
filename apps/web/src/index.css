@@ -50,3 +50,29 @@
     @apply outline-2 outline-offset-2 outline-focus;
   }
 }
+
+/*
+ * For a scroll container with a sticky header (`--sticky-header-height`): the vertical scrollbar starts below
+ * the header, so it spans only the rows that actually scroll. Chromium and Safari; Firefox keeps its own.
+ */
+@utility scrollbar-below-header {
+  &::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  &::-webkit-scrollbar-track:vertical {
+    margin-top: var(--sticky-header-height, 0px);
+  }
+  &::-webkit-scrollbar-thumb {
+    border: 3px solid transparent;
+    border-radius: 9999px;
+    background-clip: padding-box;
+    background-color: color-mix(in srgb, var(--color-ink) 28%, transparent);
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: color-mix(in srgb, var(--color-ink) 45%, transparent);
+  }
+  &::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+}

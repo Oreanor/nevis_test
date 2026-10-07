@@ -1,6 +1,8 @@
 import { clsx } from 'clsx';
 import { type CSSProperties, type ReactNode, useMemo } from 'react';
 
+import { useElementSize } from '@/shared/lib/useElementSize';
+
 import { buildParentIndex, flattenVisibleRows, type TreeAccessors } from './flattenTree';
 import { TreeTableHeader } from './TreeTableHeader';
 import { TreeTableRow } from './TreeTableRow';
@@ -24,7 +26,10 @@ export interface TreeTableProps<T> extends TreeAccessors<T>, TreeExpansionOption
   indentSize?: string;
   /** Extra rows at the top of the header, sharing the table's columns (e.g. a chart aligned with them). */
   headerRows?: ReactNode;
-  /** Keep the header (including `headerRows`) visible at the top of the scroll container. */
+  /**
+   * Keep the header (including `headerRows`) visible at the top of the scroll container. Its height is exposed
+   * as `--sticky-header-height` on the container, e.g. for the `scrollbar-below-header` utility.
+   */
   stickyHeader?: boolean;
   /** Selected row id. Passing `onSelect` enables selection of rows that have children. */
   selectedId?: string | null;
@@ -88,9 +93,13 @@ export function TreeTable<T>({
     onActiveRowChange,
   });
   const selectable = onSelect !== undefined;
+  const [headerRef, header] = useElementSize<HTMLTableSectionElement>();
 
   return (
-    <div className={clsx('overflow-x-auto', className)}>
+    <div
+      className={clsx('overflow-x-auto', className)}
+      style={stickyHeader ? ({ '--sticky-header-height': `${header.height}px` } as CSSProperties) : undefined}
+    >
       <table
         ref={gridRef}
         role="treegrid"
@@ -105,6 +114,7 @@ export function TreeTable<T>({
           extraRows={headerRows}
           sticky={stickyHeader}
           highlightedColumnId={highlightedColumnId}
+          ref={stickyHeader ? headerRef : undefined}
         />
         <tbody {...bodyProps}>
           {rows.map((flatRow, index) => (

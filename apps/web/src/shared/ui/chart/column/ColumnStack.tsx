@@ -53,6 +53,8 @@ export function ColumnStack({
   const top = yScale(segments.at(-1)?.y1 ?? 0);
   const baseline = yScale(0);
   const overlaySegment = overlay && segments.find((s) => s.series.key === overlay.seriesKey);
+  // The part is drawn from the bottom of its segment and never taller than the segment.
+  const overlayTop = overlaySegment ? overlaySegment.y0 + Math.min(overlay.value, overlaySegment.value) : 0;
 
   return (
     <svg
@@ -96,12 +98,9 @@ export function ColumnStack({
         {overlaySegment && overlay.value > 0 && (
           <rect
             x={x}
-            y={yScale(overlaySegment.y0 + Math.min(overlay.value, overlaySegment.value))}
+            y={yScale(overlayTop)}
             width={width}
-            height={
-              yScale(overlaySegment.y0) -
-              yScale(overlaySegment.y0 + Math.min(overlay.value, overlaySegment.value))
-            }
+            height={yScale(overlaySegment.y0) - yScale(overlayTop)}
             className="pointer-events-none fill-ink/25 stroke-ink"
             strokeWidth={1.5}
             data-chart-layer="overlay"

@@ -10,6 +10,7 @@ export { GridLines } from './GridLines';
 export { type BandScale, bandScale, type LinearScale, linearScale, niceTicks } from './scales';
 export { maxStackTotal, stackData } from './stack';
 export { StackedBars } from './StackedBars';
+export { Swatch } from './Swatch';
 export type { ChartDatum, ChartMargin, ChartSeries, SegmentGeometry, StackedSegment } from './types';
 export { type TickLabel, XAxis } from './XAxis';
 export { YAxis } from './YAxis';

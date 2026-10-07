@@ -1,6 +1,7 @@
 import { clsx } from 'clsx';
 
 import { useChart } from './ChartContext';
+import { Swatch } from './Swatch';
 
 interface ChartLegendProps {
   className?: string;
@@ -17,11 +18,7 @@ export function ChartLegend({ className }: ChartLegendProps) {
     >
       {series.map((s) => (
         <li key={s.key} className="flex items-center gap-1">
-          <span
-            aria-hidden="true"
-            className="size-2 shrink-0 rounded-[2px]"
-            style={{ backgroundColor: s.color }}
-          />
+          <Swatch color={s.color} />
           {s.label}
         </li>
       ))}

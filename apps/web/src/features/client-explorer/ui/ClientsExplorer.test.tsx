@@ -1,5 +1,5 @@
 import { QueryClientProvider } from '@tanstack/react-query';
-import { render, screen, within } from '@testing-library/react';
+import { act, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -75,8 +75,7 @@ describe('ClientsExplorer', () => {
 
     expect(router.state.location.search).toBe('?scope=total%2Fbranch%3Aa');
     expect(row('Branch A')).toHaveAttribute('aria-selected', 'true');
-    expect(legendLabels()).toEqual(['Anna', 'James']);
-    expect(screen.getByRole('list', { name: 'Advisers' })).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: 'Advisers' })).toHaveValue('');
     expect(screen.getByRole('status', { hidden: true })).toHaveTextContent(
       'Chart shows Branch A by adviser.',
     );
@@ -84,6 +83,16 @@ describe('ClientsExplorer', () => {
     const breadcrumb = screen.getByRole('navigation', { name: 'Chart scope' });
     await user.click(within(breadcrumb).getByRole('button', { name: 'All clients' }));
     expect(legendLabels()).toEqual(['Branch A', 'Branch B', 'Branch C']);
+  });
+
+  it('reveals the selected row when the scope changes from outside the table, e.g. Back', async () => {
+    const { router } = renderExplorer();
+    await screen.findByRole('treegrid');
+    expect(screen.queryByRole('row', { name: /^James/ })).not.toBeInTheDocument();
+
+    await act(() => router.navigate('/explorer?scope=total%2Fbranch%3Aa%2Fadviser%3Ajames'));
+
+    expect(row('James')).toHaveAttribute('aria-selected', 'true');
   });
 
   it('pivots the table when the breakdown changes', async () => {
@@ -171,12 +180,24 @@ describe('ClientsExplorer', () => {
     expect(screen.getByRole('combobox', { name: 'Advisers' })).toHaveValue('James');
   });
 
-  it('keeps the plain legend when advisers are split under a branch', async () => {
-    renderExplorer('/explorer?scope=total%2Fbranch%3Aa');
+  it('offers the adviser search wherever the chart splits by adviser, e.g. within a branch', async () => {
+    const { user, router } = renderExplorer('/explorer?scope=total%2Fbranch%3Aa');
     await screen.findByRole('treegrid');
 
-    expect(screen.queryByRole('combobox', { name: 'Advisers' })).not.toBeInTheDocument();
-    expect(legendLabels()).toEqual(['Anna', 'James']);
+    const search = screen.getByRole('combobox', { name: 'Advisers' });
+    expect(screen.queryByRole('list', { name: 'Advisers' })).not.toBeInTheDocument();
+    await user.click(search);
+    expect(
+      within(screen.getByRole('listbox'))
+        .getAllByRole('option')
+        .map((o) => o.textContent),
+    ).toEqual(['Anna', 'James']);
+
+    await user.keyboard('{ArrowDown}{Enter}');
+    expect(router.state.location.search).toBe('?scope=total%2Fbranch%3Aa%2Fadviser%3Ajames');
+    // Still there after the pick, to switch to the branch's other adviser; the client types get a legend.
+    expect(screen.getByRole('combobox', { name: 'Advisers' })).toHaveValue('James');
+    expect(legendLabels()).toEqual(['Existing clients', 'New organic', 'New paid']);
   });
 
   it('has no axe violations', async () => {

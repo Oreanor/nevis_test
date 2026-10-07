@@ -1,9 +1,7 @@
 import { clsx } from 'clsx';
 import { useId } from 'react';
 
-import type { ChartSeries } from '@/shared/ui/chart';
-
-import { Swatch } from './Swatch';
+import { type ChartSeries, Swatch } from '@/shared/ui/chart';
 
 /** Above this many series a plain list stops helping; colours are identified by hovering instead. */
 const MAX_LISTED_SERIES = 6;

@@ -62,7 +62,7 @@ interface ComboboxProps {
 
 /**
  * Searchable select following the WAI-ARIA combobox pattern (editable input + listbox popup): typing filters,
- * ↑/↓ move the active option, Enter picks it, Escape closes (and clears the query when already closed).
+ * ↑/↓ move the active option, Enter picks it, Escape closes and clears the query.
  */
 export function Combobox({
   label,
@@ -75,6 +75,7 @@ export function Combobox({
   className,
 }: ComboboxProps) {
   const id = useId();
+  const labelId = `${id}-label`;
   const listboxId = `${id}-listbox`;
   const inputRef = useRef<HTMLInputElement>(null);
   const selected = options.find((o) => o.id === value) ?? null;
@@ -107,12 +108,14 @@ export function Combobox({
     reportActive(activeId);
   }, [activeId]);
 
+  /** Opens with the selected option active. The query is always empty while closed, so all options show. */
   const open = () => {
+    if (isOpen) return;
     setIsOpen(true);
     setActiveIndex(
       Math.max(
         0,
-        matches.findIndex((o) => o.id === value),
+        options.findIndex((o) => o.id === value),
       ),
     );
   };
@@ -143,7 +146,7 @@ export function Combobox({
         }
         break;
       case 'Escape':
-        if (isOpen || query) {
+        if (isOpen) {
           event.preventDefault();
           close();
         }
@@ -153,7 +156,7 @@ export function Combobox({
 
   return (
     <div className={clsx('relative flex min-w-0 flex-col gap-1', className)}>
-      <label htmlFor={id} className="text-footnote text-muted">
+      <label id={labelId} htmlFor={id} className="text-footnote text-muted">
         {label}
       </label>
       <div className="relative">
@@ -194,12 +197,12 @@ export function Combobox({
           <ul
             id={listboxId}
             role="listbox"
-            aria-label={label}
+            aria-labelledby={labelId}
             style={popup}
             className="fixed z-50 overflow-y-auto rounded-md bg-surface p-1 shadow-lg ring-1 ring-line"
           >
             {matches.length === 0 && <li className="px-2 py-1.5 text-footnote text-muted">{emptyMessage}</li>}
-            {matches.map((option) => (
+            {matches.map((option, index) => (
               <li
                 key={option.id}
                 id={`${id}-option-${option.id}`}
@@ -210,7 +213,7 @@ export function Combobox({
                   event.preventDefault();
                   pick(option);
                 }}
-                onMouseEnter={() => setActiveIndex(matches.indexOf(option))}
+                onMouseEnter={() => setActiveIndex(index)}
                 className={clsx(
                   'flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-body',
                   option === active && 'bg-row-hover',

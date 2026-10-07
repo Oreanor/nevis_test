@@ -99,3 +99,21 @@ export function findPath(root: PivotNode, id: string): PivotNode[] {
   }
   return [];
 }
+
+export interface AdviserChoices {
+  advisers: readonly PivotNode[];
+  /** The adviser the scope is on, if any. */
+  selectedId: string | null;
+}
+
+/**
+ * Advisers to pick from at a scope: its children when they are advisers, or its siblings when the scope is an
+ * adviser itself, so the choice stays available for switching after a pick. `null` elsewhere.
+ */
+export function adviserChoices(scopePath: readonly PivotNode[]): AdviserChoices | null {
+  const scope = scopePath.at(-1);
+  const parent = scopePath.at(-2);
+  if (scope?.children[0]?.dimension === 'adviser') return { advisers: scope.children, selectedId: null };
+  if (scope?.dimension === 'adviser' && parent) return { advisers: parent.children, selectedId: scope.id };
+  return null;
+}

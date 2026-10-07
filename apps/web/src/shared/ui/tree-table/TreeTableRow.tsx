@@ -64,7 +64,7 @@ export function TreeTableRow<T>({
           isSelected
             ? [cellBackground.selected, selectedHierarchyCellClass]
             : isHighlighted
-              ? ['bg-surface', cellBackground.highlighted]
+              ? cellBackground.highlighted
               : cellBackground.hierarchy,
         )}
       >

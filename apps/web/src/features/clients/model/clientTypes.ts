@@ -1,17 +1,8 @@
+import { type ClientTypeId, clientTypeOfChannel } from '@nevis/shared';
+
 import { type ClientNode, findNodes } from './clientTree';
 
-export type ClientType = 'existing' | 'organic' | 'paid';
-
-export const CLIENT_TYPES: readonly { type: ClientType; label: string }[] = [
-  { type: 'existing', label: 'Existing clients' },
-  { type: 'organic', label: 'New organic' },
-  { type: 'paid', label: 'New paid' },
-];
-
-export type ClientTypeTotals = Record<ClientType, number[]>;
-
-/** Channel names in the payload that identify new clients (display labels may differ). */
-const NEW_CLIENT_CHANNELS = { organic: 'New organic', paid: 'New paid' } as const;
+export type ClientTypeTotals = Record<ClientTypeId, number[]>;
 
 const sumByMonth = (nodes: readonly ClientNode[], monthCount: number): number[] =>
   Array.from({ length: monthCount }, (_, month) =>
@@ -28,11 +19,11 @@ const sumByMonth = (nodes: readonly ClientNode[], monthCount: number): number[] 
  */
 export function computeClientTypeTotals(root: ClientNode): ClientTypeTotals {
   const monthCount = root.values.length;
-  const channelsNamed = (name: string) =>
-    findNodes(root, (node) => node.kind === 'channel' && node.name === name);
+  const channelsOfType = (type: ClientTypeId) =>
+    findNodes(root, (node) => node.kind === 'channel' && clientTypeOfChannel(node.name) === type);
 
-  const organic = sumByMonth(channelsNamed(NEW_CLIENT_CHANNELS.organic), monthCount);
-  const paid = sumByMonth(channelsNamed(NEW_CLIENT_CHANNELS.paid), monthCount);
+  const organic = sumByMonth(channelsOfType('organic'), monthCount);
+  const paid = sumByMonth(channelsOfType('paid'), monthCount);
   const existing = root.values.map((total, month) =>
     Math.max(0, total - (organic[month] ?? 0) - (paid[month] ?? 0)),
   );

@@ -1,3 +1,5 @@
+import { isClientTypeId } from '@nevis/shared';
+
 import type { ClientFact } from './facts';
 import { ADVISER_STEPS, BRANCH_COLORS, CLIENT_TYPE_COLORS, NEUTRAL_SERIES_COLOR } from './palette';
 import type { PivotNode } from './pivot';
@@ -36,7 +38,7 @@ export function createSeriesColors(facts: readonly ClientFact[]): SeriesColors {
         case 'adviser':
           return adviserColor.get(memberId) ?? NEUTRAL_SERIES_COLOR;
         case 'clientType':
-          return CLIENT_TYPE_COLORS[memberId] ?? NEUTRAL_SERIES_COLOR;
+          return isClientTypeId(memberId) ? CLIENT_TYPE_COLORS[memberId] : NEUTRAL_SERIES_COLOR;
         default:
           return NEUTRAL_SERIES_COLOR;
       }

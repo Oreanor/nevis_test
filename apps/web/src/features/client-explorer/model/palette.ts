@@ -1,3 +1,5 @@
+import type { ClientTypeId } from '@nevis/shared';
+
 /**
  * Series colours of the explorer, validated with the dataviz palette validator against the white card surface
  * (light mode): lightness band, chroma floor, adjacent CVD ΔE ≥ 8 and normal-vision ΔE ≥ 15 all pass.
@@ -6,7 +8,7 @@
  */
 
 /** Client types: the design's hues, snapped into the validator band (organic/paid were too light/grey). */
-export const CLIENT_TYPE_COLORS: Readonly<Record<string, string>> = {
+export const CLIENT_TYPE_COLORS: Readonly<Record<ClientTypeId, string>> = {
   existing: '#b29df8',
   organic: '#e89081',
   paid: '#a0475e',

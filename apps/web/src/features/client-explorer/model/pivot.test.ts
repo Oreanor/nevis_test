@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { explorerFixture } from '../testing/explorerFixture';
 import { toFacts } from './facts';
-import { type Breakdown, buildPivotTree, findPath, type PivotNode, TOTAL_ID } from './pivot';
+import { adviserChoices, type Breakdown, buildPivotTree, findPath, type PivotNode, TOTAL_ID } from './pivot';
 
 const facts = toFacts(explorerFixture);
 
@@ -96,5 +96,28 @@ describe('findPath', () => {
 
   it('returns an empty path for unknown ids', () => {
     expect(findPath(tree, 'total/branch:zzz')).toEqual([]);
+  });
+});
+
+describe('adviserChoices', () => {
+  const names = (nodes: readonly PivotNode[] | undefined) => nodes?.map((n) => n.name);
+
+  it("offers a scope's advisers when the chart splits by adviser", () => {
+    const tree = buildPivotTree(facts, 'branch');
+    const choices = adviserChoices(findPath(tree, 'total/branch:a'));
+    expect(names(choices?.advisers)).toEqual(['Anna', 'James']);
+    expect(choices?.selectedId).toBeNull();
+  });
+
+  it('keeps offering the siblings once an adviser is the scope', () => {
+    const tree = buildPivotTree(facts, 'adviser');
+    const choices = adviserChoices(findPath(tree, 'total/adviser:james'));
+    expect(names(choices?.advisers)).toEqual(names(tree.children));
+    expect(choices?.selectedId).toBe('total/adviser:james');
+  });
+
+  it('offers nothing where advisers are not in play', () => {
+    const tree = buildPivotTree(facts, 'branch');
+    expect(adviserChoices([tree])).toBeNull();
   });
 });

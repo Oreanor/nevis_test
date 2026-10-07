@@ -2,13 +2,26 @@
  * Generates `src/modules/clients/data/clients.extended.json`: the brief's payload extended so every branch has
  * advisers and every adviser has a client-type split, with every parent equal to the sum of its children.
  *
+ * Brief figures are kept wherever the brief has them (adviser totals, Anna Blackwood's new clients); parent totals
+ * are recomputed from their children, which corrects the few places where the brief does not add up.
+ *
  * Deterministic (seeded), so re-running it produces the same file. Run: `npm run generate:extended -w @nevis/api`.
  */
 import { writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { type Branch, type Channel, type Company, companySchema, type Employee } from '@nevis/shared';
+import {
+  type Branch,
+  type Channel,
+  CLIENT_TYPES,
+  type ClientTypeId,
+  clientTypeOfChannel,
+  type Company,
+  companySchema,
+  type Employee,
+  MONTH_COUNT,
+} from '@nevis/shared';
 
 import brief from '../src/modules/clients/data/clients.json' with { type: 'json' };
 
@@ -64,39 +77,39 @@ function splitInteger(total: number, weights: readonly number[]): number[] {
 }
 
 const sumValues = (nodes: readonly { values: readonly number[] }[]) =>
-  Array.from({ length: 12 }, (_, month) => nodes.reduce((sum, node) => sum + (node.values[month] ?? 0), 0));
+  Array.from({ length: MONTH_COUNT }, (_, month) =>
+    nodes.reduce((sum, node) => sum + (node.values[month] ?? 0), 0),
+  );
 
-/** Client-type split of an adviser's monthly totals; existing clients get the remainder. */
-function splitByClientType(totals: readonly number[], existingIds?: readonly string[]): Channel[] {
-  const organicShare = between(NEW_ORGANIC_SHARE);
-  const paidShare = between(NEW_PAID_SHARE);
-  const organic: number[] = [];
-  const paid: number[] = [];
-  const existing: number[] = [];
-  for (const total of totals) {
-    const o = Math.round(total * organicShare * between([0.6, 1.4]));
-    const p = Math.round(total * paidShare * between([0.6, 1.4]));
-    organic.push(o);
-    paid.push(p);
-    existing.push(total - o - p);
-  }
-  const [existingId, organicId, paidId] = existingIds ?? [uuid(), uuid(), uuid()];
-  return [
-    { id: existingId ?? uuid(), name: 'Existing clients', values: existing },
-    { id: organicId ?? uuid(), name: 'New organic', values: organic },
-    { id: paidId ?? uuid(), name: 'New paid', values: paid },
-  ];
+/** Random monthly counts of one kind of new client: a share of each month's total, with some noise. */
+function newClients(totals: readonly number[], share: readonly [number, number]): number[] {
+  const typical = between(share);
+  return totals.map((total) => Math.round(total * typical * between([0.6, 1.4])));
+}
+
+/**
+ * Client-type split of an adviser's monthly totals. New clients are kept from the brief where it has them and
+ * generated otherwise; existing clients are the remainder, so the types always add up to the adviser's total.
+ */
+function splitByClientType(totals: readonly number[], channels: readonly Channel[] = []): Channel[] {
+  const channelOf = (type: ClientTypeId) =>
+    channels.find((channel) => clientTypeOfChannel(channel.name) === type);
+  const organic = channelOf('organic')?.values ?? newClients(totals, NEW_ORGANIC_SHARE);
+  const paid = channelOf('paid')?.values ?? newClients(totals, NEW_PAID_SHARE);
+  const values: Record<ClientTypeId, readonly number[]> = {
+    existing: totals.map((total, month) => total - (organic[month] ?? 0) - (paid[month] ?? 0)),
+    organic,
+    paid,
+  };
+  return CLIENT_TYPES.map(({ id, channelName }) => ({
+    id: channelOf(id)?.id ?? uuid(),
+    name: channelName,
+    values: [...values[id]],
+  }));
 }
 
 function withClientTypes(employee: Employee): Employee {
-  const { channels, ...rest } = employee;
-  return {
-    ...rest,
-    channels: splitByClientType(
-      employee.values,
-      channels?.map((channel) => channel.id),
-    ),
-  };
+  return { ...employee, channels: splitByClientType(employee.values, employee.channels) };
 }
 
 function newAdvisers(branch: Branch, names: readonly string[]): Employee[] {

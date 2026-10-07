@@ -4,11 +4,17 @@ import { type Breakdown, TOTAL_ID } from './pivot';
 
 const breakdownSchema = z.enum(['branch', 'clientType', 'adviser']) satisfies z.ZodType<Breakdown>;
 
-export const BREAKDOWN_OPTIONS: readonly { value: Breakdown; label: string }[] = [
-  { value: 'branch', label: 'Branch' },
-  { value: 'adviser', label: 'Adviser' },
-  { value: 'clientType', label: 'Client type' },
-];
+/** How each dimension is named in the UI: as an option, as a legend title and in running text. */
+export const DIMENSION_TEXT: Readonly<Record<Breakdown, { label: string; plural: string; noun: string }>> = {
+  branch: { label: 'Branch', plural: 'Branches', noun: 'branch' },
+  adviser: { label: 'Adviser', plural: 'Advisers', noun: 'adviser' },
+  clientType: { label: 'Client type', plural: 'Client types', noun: 'client type' },
+};
+
+/** Breakdowns in the order the selector offers them. */
+export const BREAKDOWN_OPTIONS: readonly { value: Breakdown; label: string }[] = (
+  ['branch', 'adviser', 'clientType'] as const
+).map((value) => ({ value, label: DIMENSION_TEXT[value].label }));
 
 /** What the explorer shows; lives in the URL so views can be shared and Back works. */
 export interface ExplorerView {

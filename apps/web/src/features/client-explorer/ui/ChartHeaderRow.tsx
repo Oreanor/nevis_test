@@ -13,8 +13,10 @@ import { ColumnTooltip } from './ColumnTooltip';
  */
 const CHART_HEIGHT_CLASS = 'h-60 fit:h-[clamp(8rem,calc(50cqh-3.5rem),26.25rem)]';
 const Y_AXIS_WIDTH = 28;
-/** Columns from here on open their tooltip towards the left, so it stays inside the table. */
-const TOOLTIP_FLIP_INDEX = 8;
+/** Width the y axis takes in the corner cell, including its gap to the first bar. */
+export const CHART_Y_AXIS_SPACE = Y_AXIS_WIDTH + 8;
+/** Columns past this share of the row open their tooltip towards the left, so it stays inside the table. */
+const TOOLTIP_FLIP_FRACTION = 2 / 3;
 
 /** Month under the pointer, and the segment under it if any. */
 export interface ChartHover {
@@ -94,7 +96,7 @@ export function ChartHeaderRow({
                 title={month.label}
                 segments={segments}
                 hoveredSeriesKey={hover.seriesKey}
-                align={month.index < TOOLTIP_FLIP_INDEX ? 'start' : 'end'}
+                align={month.index < months.length * TOOLTIP_FLIP_FRACTION ? 'start' : 'end'}
               />
             )}
           </td>
@@ -103,5 +105,3 @@ export function ChartHeaderRow({
     </tr>
   );
 }
-
-export const CHART_Y_AXIS_SPACE = Y_AXIS_WIDTH + 8;

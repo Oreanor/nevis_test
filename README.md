@@ -11,6 +11,10 @@ The work is in two parts:
 2. **`/explorer` – Clients explorer.** My own take on the same data: the version of the dashboard I would
    propose, built separately so the two can be compared. The explorer is linked from the dashboard header.
 
+**Live demo:** <https://nevistest.vercel.app/> (the dashboard) and
+<https://nevistest.vercel.app/explorer> (the explorer) – deployed from this repository, so you can try both
+without running anything locally.
+
 Everything that follows explains what was built, the decisions behind it, and the improvements I suggest.
 
 ## Contents
@@ -77,7 +81,8 @@ Production-like run: `npm run build` bundles the API (tsdown → `apps/api/dist/
 **Deploying to Vercel.** `vercel.json` builds both apps, serves the web build as static files and runs the
 same Express app as a serverless function (`api/index.mjs` → `apps/api/dist/handler.js`) for `/api/*` and
 `/avatars/*`; every other path falls back to `index.html`, so `/explorer` works as a direct link. Import the
-repository in Vercel with the default settings; no environment variables are needed.
+repository in Vercel with the default settings; no environment variables are needed. The live demo at
+<https://nevistest.vercel.app/> is deployed exactly this way.
 
 ## Test and check
 
@@ -165,10 +170,11 @@ tried to apply here. This is the part of the work I deliberately did not hand ov
 - **Linked highlighting.** Hovering or focusing a row highlights it in the chart (a row deeper than the chart's
   level is marked as its share of the containing segment). Hovering a month shows a tooltip with every value
   and highlights the month in the table; hovering a segment or a legend entry highlights its row.
-- **A legend that names its categories** (Branches, Advisers, Client types). When the data is broken down by
-  adviser, an adviser search stays in the panel: it lists every adviser with their colour and branch (so it
-  doubles as the legend), previews the highlighted one in the chart, and focuses the chart on the one you pick.
-  It keeps the chosen name, so you can switch advisers directly; the client-type legend appears below it.
+- **A legend that names its categories** (Branches, Advisers, Client types). Wherever the chart splits by
+  adviser (the adviser breakdown, or one branch), an adviser search takes the legend's place: it lists the
+  advisers with their colour (and branch where the hierarchy does not show it), previews the highlighted one in
+  the chart, and focuses the chart on the one you pick. It keeps the chosen name, so you can switch advisers
+  directly; the client-type legend appears below it.
 - **Colours that belong to the entity.** Branch 2 has the same colour in every view; advisers use shades of
   their branch's colour, so the branch structure stays visible even with many advisers. The palettes were
   checked with a validator for colour-blind safety and contrast, and muddy colours (dark oranges and

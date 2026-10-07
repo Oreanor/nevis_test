@@ -1,7 +1,7 @@
 import { Avatar } from '@/shared/ui/Avatar';
+import { Swatch } from '@/shared/ui/chart';
 
 import type { PivotNode } from '../model/pivot';
-import { Swatch } from './Swatch';
 
 interface ExplorerRowNameProps {
   node: PivotNode;

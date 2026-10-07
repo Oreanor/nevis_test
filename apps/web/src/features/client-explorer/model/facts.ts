@@ -1,4 +1,4 @@
-import type { Company, Employee } from '@nevis/shared';
+import { clientTypeOfChannel, type Company, type Employee } from '@nevis/shared';
 
 interface Member {
   id: string;
@@ -19,17 +19,11 @@ export interface ClientFact {
   values: readonly number[];
 }
 
-/** Client types are identified by their channel name in the payload; ids are stable across advisers. */
-const CLIENT_TYPE_IDS: Record<string, string> = {
-  'Existing clients': 'existing',
-  'New organic': 'organic',
-  'New paid': 'paid',
-};
-
 const UNSPECIFIED_TYPE: Member = { id: 'unspecified', name: 'Not specified' };
 
+/** Ids are stable across advisers; an unknown channel still gets its own member rather than being dropped. */
 function clientTypeOf(channelName: string): Member {
-  return { id: CLIENT_TYPE_IDS[channelName] ?? `channel:${channelName}`, name: channelName };
+  return { id: clientTypeOfChannel(channelName) ?? `channel:${channelName}`, name: channelName };
 }
 
 /**

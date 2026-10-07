@@ -1,7 +1,7 @@
 import { clsx } from 'clsx';
 
 import { formatInteger } from '@/shared/lib/format';
-import type { StackedSegment } from '@/shared/ui/chart';
+import { type StackedSegment, Swatch } from '@/shared/ui/chart';
 
 interface ColumnTooltipProps {
   title: string;
@@ -39,10 +39,7 @@ export function ColumnTooltip({ title, segments, hoveredSeriesKey, align }: Colu
               hoveredSeriesKey === segment.series.key && 'font-medium',
             )}
           >
-            <span
-              className="size-2 shrink-0 rounded-[2px]"
-              style={{ backgroundColor: segment.series.color }}
-            />
+            <Swatch color={segment.series.color} />
             <span className="min-w-0 flex-1 truncate">{segment.series.label}</span>
             <span className="tabular-nums">{formatInteger(segment.value)}</span>
           </li>

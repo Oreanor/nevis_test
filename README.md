@@ -8,20 +8,16 @@ The work is in two parts:
 
 1. **`/` – Clients dashboard.** The brief implemented as specified, matching the Figma mockup as closely as I
    could measure it.
-2. **`/explorer` – Clients explorer.** My own take on the same data. While building the dashboard I came across
-   a few questions about the design and the data that, in a normal work process, I would have raised with the
-   designer and product owner before writing code. Here I could not ask, so I implemented the brief as given and
-   then, separately, the version I would propose. The explorer is linked from the dashboard header.
+2. **`/explorer` – Clients explorer.** My own take on the same data: the version of the dashboard I would
+   propose, built separately so the two can be compared. The explorer is linked from the dashboard header.
 
-Everything that follows explains what was built, the assumptions behind it, the questions I would have liked
-to ask, and the improvements I suggest.
+Everything that follows explains what was built, the decisions behind it, and the improvements I suggest.
 
 ## Contents
 
 - [Requirements at a glance](#requirements-at-a-glance)
 - [Run it](#run-it) · [Test and check](#test-and-check)
 - [Part 1 – The dashboard, as specified](#part-1--the-dashboard-as-specified)
-- [Questions I would have asked](#questions-i-would-have-asked)
 - [Part 2 – Clients explorer, my take](#part-2--clients-explorer-my-take)
 - [Scrolling principles](#scrolling-principles)
 - [How it is built](#how-it-is-built)
@@ -122,44 +118,16 @@ The dashboard at `/` follows the brief and the mockup:
 - **Phones** get a compact layout: smaller title and spacing, all twelve months visible in the chart without
   scrolling, and a denser table that scrolls horizontally with a pinned name column.
 
-Where the brief or the design left room for interpretation, I chose the option closest to the mockup and
-noted it below.
+**Decisions** where the brief or the design left room for interpretation:
 
-## Questions I would have asked
-
-These are the points I would normally have clarified before starting. I made a call on each, kept the data
-exactly as provided, and kept every decision easy to change.
-
-**About the data**
-
-1. **Should parent rows equal the sum of their children?** In a few months they do not: Company in May 2024 is
-   301 while the branches add up to 279 (if Maria Gutierrez's 22 were 44, both would match); Branch 1 in
-   August 2024 is 214 against 216; Anna Blackwood's channels differ from her total in May–September 2024.
-   This may well be intentional (for example, de-duplicated client counts), so I show the figures exactly as
-   received.
-2. **Which months do the values cover?** The arrays carry no dates. I used the period stated in the brief
-   (February 2024 onwards) and kept it in one place; ideally the API would return it.
-
-**About the design**
-
-3. **What should the chart's client-type split be based on?** The mockup splits the company total into
-   Existing / New organic / New paid, but only one adviser has that breakdown in the data. I took "New
-   organic" and "New paid" as the sums of the channel rows that exist, and "Existing clients" as the rest of
-   the company total, so each bar still matches the Company row. The bars in the mockup look illustrative
-   (January 2025 is about 363 there, while the data says 350).
-4. **Should rows without children show an expand arrow?** The mockup shows one on Branch 2 and Branch 3, which
-   have nothing to expand. I left it out: an arrow that reveals nothing is confusing, and screen readers would
-   announce a collapsed row that cannot be expanded.
-5. **Two figures in the mockup differ from the data** (Branch 1 in July 2024 shows 291 instead of 201; Robert
-   Chen in August 2024 shows 56 instead of 58). I assumed the data is the source of truth.
-6. **Colour contrast.** The light "New organic" colour is very close to the background and to its neighbour,
-   which makes the thin segments hard to tell apart, especially with colour vision deficiencies. The dashboard
-   keeps the mockup's colours; the explorer uses adjusted shades of the same hues.
-
-**About behaviour**
-
-7. **Should the chart react to the table?** In the prototype the chart stays the same when rows are expanded,
-   so drilling down in the table does not change what the chart shows. This question led to Part 2.
+- **Chart split by client type.** Only one adviser has a client-type breakdown in the data, so "New organic" and
+  "New paid" are the sums of the channel rows that exist, and "Existing clients" is the rest of the company
+  total. Each bar therefore matches the Company row in the table.
+- **No expand arrow on rows without children** (Branch 2 and Branch 3): an arrow that reveals nothing is
+  confusing, and screen readers would announce a row that cannot be expanded.
+- **Data shown exactly as received.** Where a parent differs from the sum of its children (for example Company
+  in May 2024), or where the mockup shows a different figure, the API payload is the source of truth.
+- **Reporting period** February 2024 – January 2025, as stated in the brief; the values carry no dates.
 
 ## Part 2 – Clients explorer, my take
 
@@ -167,6 +135,12 @@ The mockup is a clean starting point, and I would like to respectfully suggest a
 data is presented. The explorer at `/explorer` implements them on the same visual language (tokens, type,
 spacing), so the two pages can be compared side by side. The full reasoning, written for a non-technical
 reader, is in [`docs/IMPROVEMENTS.md`](docs/IMPROVEMENTS.md).
+
+**A note on where these ideas come from.** As the brief allows, I used AI tools to help with parts of the
+implementation. The design direction of the explorer, however, is my own: what to show, how to connect the
+chart and the table, and how people should move through the data. It draws on about seven years of work in
+infographics and data visualisation, where I learned the principles of clear, usable data design that I have
+tried to apply here. This is the part of the work I deliberately did not hand over to AI.
 
 **What I saw as opportunities in the original layout**
 

@@ -169,7 +169,8 @@ tried to apply here. This is the part of the work I deliberately did not hand ov
   a breadcrumb leads back. The view is kept in the URL, so it can be shared and the Back button works.
 - **Linked highlighting.** Hovering or focusing a row highlights it in the chart (a row deeper than the chart's
   level is marked as its share of the containing segment). Hovering a month shows a tooltip with every value
-  and highlights the month in the table; hovering a segment or a legend entry highlights its row.
+  and highlights the month in the table; hovering a segment or a legend entry highlights its row,
+  and clicking a segment selects it.
 - **A legend that names its categories** (Branches, Advisers, Client types). Wherever the chart splits by
   adviser (the adviser breakdown, or one branch), an adviser search takes the legend's place: it lists the
   advisers with their colour (and branch where the hierarchy does not show it), previews the highlighted one in

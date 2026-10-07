@@ -140,6 +140,17 @@ describe('ClientsExplorer', () => {
     expect(febCell).not.toHaveTextContent('Total');
   });
 
+  it('selects the row of a clicked bar segment', async () => {
+    const { user, router } = renderExplorer();
+    await screen.findByRole('treegrid');
+
+    const branchB = chartSegments().find((s) => s.dataset.series === 'total/branch:b');
+    await user.click(branchB as SVGRectElement);
+
+    expect(router.state.location.search).toBe('?scope=total%2Fbranch%3Ab');
+    expect(row('Branch B')).toHaveAttribute('aria-selected', 'true');
+  });
+
   it('highlights a series from its legend entry in the chart and the table', async () => {
     const { user } = renderExplorer();
     await screen.findByRole('treegrid');

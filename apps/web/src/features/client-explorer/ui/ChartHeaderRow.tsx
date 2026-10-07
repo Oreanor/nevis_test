@@ -32,6 +32,8 @@ interface ChartHeaderRowProps {
   highlight: ChartHighlight | null;
   hover: ChartHover | null;
   onHoverChange: (hover: ChartHover | null) => void;
+  /** A bar segment was clicked. */
+  onSeriesClick: (seriesKey: string) => void;
   /** Measures the corner cell: its height is the chart height, its width the hierarchy column's. */
   cornerRef: Ref<HTMLTableCellElement>;
 }
@@ -47,6 +49,7 @@ export function ChartHeaderRow({
   highlight,
   hover,
   onHoverChange,
+  onSeriesClick,
   cornerRef,
 }: ChartHeaderRowProps) {
   return (
@@ -89,6 +92,11 @@ export function ChartHeaderRow({
                   onHoverChange({ month: month.index, seriesKey: segment.series.key })
                 }
                 onSegmentLeave={() => onHoverChange({ month: month.index, seriesKey: null })}
+                onSegmentClick={(segment) => {
+                  // The chart is about to change, so the clicked segment is no longer under the pointer.
+                  onHoverChange({ month: month.index, seriesKey: null });
+                  onSeriesClick(segment.series.key);
+                }}
               />
             )}
             {isHovered && segments.length > 0 && (

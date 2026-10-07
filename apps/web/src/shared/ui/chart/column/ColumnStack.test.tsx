@@ -84,6 +84,18 @@ describe('ColumnStack', () => {
     expect(onSegmentEnter).toHaveBeenCalledWith(expect.objectContaining({ value: 10 }));
   });
 
+  it('reports clicked segments', async () => {
+    const onSegmentClick = vi.fn();
+    const { container } = render(
+      <ColumnStack segments={jan} scale={scale} onSegmentClick={onSegmentClick} />,
+    );
+    const { default: userEvent } = await import('@testing-library/user-event');
+
+    await userEvent.click(segmentRects(container)[1] as Element);
+
+    expect(onSegmentClick).toHaveBeenCalledWith(expect.objectContaining({ value: 10 }));
+  });
+
   it('draws dotted grid lines at the ticks', () => {
     const { container } = render(<ColumnStack segments={jan} scale={scale} />);
     expect(container.querySelectorAll('[data-chart-layer="grid"] line')).toHaveLength(5);

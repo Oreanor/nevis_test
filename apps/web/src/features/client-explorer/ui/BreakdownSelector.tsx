@@ -18,11 +18,11 @@ export function BreakdownSelector({ value, onChange }: BreakdownSelectorProps) {
   const id = useId();
 
   return (
-    <div className="flex min-w-0 flex-col gap-1">
-      <label htmlFor={id} className="text-footnote text-muted">
+    <div className="flex min-w-0 items-center gap-2">
+      <label htmlFor={id} className="shrink-0 text-footnote text-muted">
         Break down by
       </label>
-      <div className="relative">
+      <div className="relative min-w-0 flex-1">
         <select
           id={id}
           value={value}

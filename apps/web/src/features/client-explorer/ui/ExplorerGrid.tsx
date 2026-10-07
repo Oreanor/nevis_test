@@ -121,6 +121,13 @@ export function ExplorerGrid({ facts, view, onViewChange }: ExplorerGridProps) {
     selectScope(id);
     scrollToRow(id);
   };
+  // A bar segment stands for a row: one with children becomes the scope (as when its row is clicked), a leaf
+  // is brought into view.
+  const pickSeries = (id: string) => {
+    const node = scope.children.find((child) => child.id === id);
+    if (node?.children.length) focusSeries(id);
+    else if (node) scrollToRow(id);
+  };
 
   // A scope's children all share one dimension; leaves have none (and an empty chart).
   const seriesDimension = scope.children[0]?.dimension;
@@ -202,6 +209,7 @@ export function ExplorerGrid({ facts, view, onViewChange }: ExplorerGridProps) {
             highlight={highlight}
             hover={chartHover}
             onHoverChange={setChartHover}
+            onSeriesClick={pickSeries}
             cornerRef={cornerRef}
           />
         }

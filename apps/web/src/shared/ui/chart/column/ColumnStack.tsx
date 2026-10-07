@@ -27,6 +27,7 @@ interface ColumnStackProps {
   gridLines?: boolean;
   onSegmentEnter?: (segment: StackedSegment) => void;
   onSegmentLeave?: () => void;
+  onSegmentClick?: (segment: StackedSegment) => void;
   className?: string;
 }
 
@@ -44,6 +45,7 @@ export function ColumnStack({
   gridLines = true,
   onSegmentEnter,
   onSegmentLeave,
+  onSegmentClick,
   className,
 }: ColumnStackProps) {
   const clipId = useId();
@@ -87,11 +89,13 @@ export function ColumnStack({
               className={clsx(
                 'transition-opacity motion-reduce:transition-none',
                 highlightedSeries !== null && segment.series.key !== highlightedSeries && 'opacity-25',
+                onSegmentClick && 'cursor-pointer',
               )}
               data-series={segment.series.key}
               data-value={segment.value}
               onMouseEnter={onSegmentEnter && (() => onSegmentEnter(segment))}
               onMouseLeave={onSegmentLeave}
+              onClick={onSegmentClick && (() => onSegmentClick(segment))}
             />
           ),
         )}

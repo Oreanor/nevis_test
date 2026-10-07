@@ -68,8 +68,9 @@ export function TreeTableRow<T>({
               : cellBackground.hierarchy,
         )}
       >
+        {/* On phones the hierarchy column takes at most half the screen (minus its padding); long names truncate. */}
         <div
-          className="flex items-center gap-1.5 sm:gap-2"
+          className="flex max-w-[calc(50vw-1rem)] items-center gap-1.5 sm:max-w-none sm:gap-2"
           style={{ paddingLeft: `calc(${level - 1} * var(--tree-indent))` }}
         >
           {isExpandable ? (
